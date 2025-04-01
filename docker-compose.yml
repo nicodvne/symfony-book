@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  nginx:   
+    build:
+      context: ./docker/nginx 
+    container_name: nginx-container  
+    ports:   
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - network_app
+
+  php-fpm:
+    build: 
+      context: ./docker/php
+    container_name: php-fpm
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - network_app
+  
+  postgres:
+    image: postgres:17.4
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: symfony-book
+      POSTGRES_PASSWORD: uDKcVOzS8WINzgWijDtS
+      POSTGRES_DB: symfony-book
+    networks:
+      - network_app
+
+networks:
+  network_app:
